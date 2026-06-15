@@ -1102,6 +1102,7 @@ function renderDesigns(){
   kits.forEach(kit=>{
     const el=document.createElement('div');
     el.className='design-card';
+    el.dataset.kitId = kit.id;
     const img=kit.images&&kit.images[0]?kit.images[0]:'https://via.placeholder.com/400x300?text=Sin+imagen';
     el.innerHTML=`
       <div class="design-card-img">
@@ -1852,7 +1853,12 @@ function activateAllElements() {
       img.dataset.efLabel = label;
       img.dataset.efFolder = folder;
 
-      // Wrap si no tiene posición relativa
+      // Si es imagen de design-card, guardar el kitId
+      const designCard = img.closest('.design-card');
+      if (designCard && designCard.dataset.kitId) {
+        img.dataset.efKitId = designCard.dataset.kitId;
+      }
+
       const wrap = img.parentElement;
       if (!wrap.classList.contains('ef-img-wrap')) {
         wrap.classList.add('ef-img-wrap');
@@ -2104,7 +2110,24 @@ function efReplaceImage(img) {
       img.src = result.url;
       img.dataset.efNewSrc = result.url;
       img.dataset.efEdited = 'true';
-      showToast('Imagen actualizada ✓');
+
+      // Buscar el kit por efKitId o por el kit seleccionado actualmente
+      const kitId = img.dataset.efKitId || (state.selected.design ? state.selected.design.id : null);
+      if (kitId) {
+        const kit = state.kits.find(k => k.id === kitId);
+        if (kit) {
+          if (!kit.images) kit.images = [];
+          kit.images[0] = result.url;
+          if (state.selected.design && state.selected.design.id === kitId) {
+            state.selected.design.images = kit.images;
+          }
+          showToast('Imagen guardada en el kit ✓ — presioná GUARDAR TODO');
+        } else {
+          showToast('Imagen actualizada ✓ — presioná GUARDAR TODO');
+        }
+      } else {
+        showToast('Imagen actualizada ✓ — presioná GUARDAR TODO');
+      }
     } else { showToast('Error: ' + result.error); }
     input.remove();
   });
