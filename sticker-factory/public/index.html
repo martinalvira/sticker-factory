@@ -998,9 +998,10 @@ function applySiteTheme(site) {
       }
     });
   }
-  // Aplicar links del nav
+  // Aplicar links del nav — solo header-nav, nunca social-nav
   if (site.navLinks) {
     document.querySelectorAll('.header-nav a').forEach(a => {
+      if (a.closest('.social-nav')) return; // nunca tocar social icons
       const orig = a.dataset.efOriginal || a.textContent.trim();
       if (site.navLinks[orig]) {
         a.textContent = site.navLinks[orig].text;
@@ -1572,6 +1573,15 @@ function hideStep(id){
 
 // ─── ARRANQUE ─────────────────────────────────────────────────
 loadData();
+
+// Reaplicar íconos sociales después de que todo cargue
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    if (state.site && state.site.socialIcons) {
+      applySiteTheme(state.site);
+    }
+  }, 500);
+});
 
 // ══════════════════════════════════════════════════════════════
 // MODO EDICIÓN — 5 toques en el logo
@@ -2182,8 +2192,9 @@ async function saveAllEdits() {
   // Logo URL
   if (state.site?.logoUrl) { /* ya guardado en state.site por efEditLogoImg */ }
 
-  // Nav links
-  document.querySelectorAll('.header-nav a[data-ef-edited],.social-nav a[data-ef-edited]').forEach(a => {
+  // Nav links — solo header-nav, no social-nav
+  document.querySelectorAll('.header-nav a[data-ef-edited]').forEach(a => {
+    if (a.closest('.social-nav')) return;
     if (!state.site.navLinks) state.site.navLinks = {};
     state.site.navLinks[a.dataset.efOriginal] = { text: a.textContent.trim(), href: a.getAttribute('href') };
   });
