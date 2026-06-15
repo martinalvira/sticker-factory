@@ -1898,6 +1898,7 @@ function showContextMenu(e, el) {
       <button class="ef-menu-btn" onclick="efReplaceHeaderIcon(efTarget)"><span class="ef-icon">🖼️</span> Cambiar ícono (PNG/SVG)</button>
       <button class="ef-menu-btn" onclick="efEditText(efTarget)"><span class="ef-icon">✏️</span> Editar emoji/texto</button>`;
   }
+  else if (type === 'logo') {
     buttons = `
       <button class="ef-menu-btn" onclick="efEditText(efTarget)"><span class="ef-icon">✏️</span> Editar texto del logo</button>
       <button class="ef-menu-btn" onclick="efEditLogoImg(efTarget)"><span class="ef-icon">🖼️</span> Cambiar logo (imagen)</button>`;
@@ -2064,42 +2065,6 @@ function efReplaceHeaderIcon(el) {
       state.site.headerIcons[iconId] = { imgUrl: result.url, title: el.title || '' };
       showToast('Ícono actualizado ✓');
     } else { showToast('Error: ' + result.error); }
-    input.remove();
-  });
-}
-  closeMenu();
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = 'image/png,image/svg+xml,image/jpeg,image/webp';
-  input.style.display = 'none';
-  document.body.appendChild(input);
-  input.click();
-  input.addEventListener('change', async () => {
-    const file = input.files[0];
-    if (!file) return;
-    showToast('Subiendo ícono...', 0);
-    const result = await uploadToCloudinary(file, 'sticker-factory-icons');
-    if (result.ok) {
-      const currentHref = el.getAttribute('href') || '#';
-      const currentTitle = el.getAttribute('title') || '';
-      el.innerHTML = `<img src="${result.url}" alt="${currentTitle}" style="width:22px;height:22px;object-fit:contain;vertical-align:middle;filter:brightness(0) invert(1)">`;
-      el.dataset.efEdited = 'true';
-      el.dataset.efNewIconUrl = result.url;
-      // Guardar en state.site
-      if (!state.site.socialIcons) state.site.socialIcons = [];
-      const socialLinks = Array.from(document.querySelectorAll('.social-nav a'));
-      const idx = socialLinks.indexOf(el);
-      if (idx >= 0) {
-        state.site.socialIcons[idx] = {
-          imgUrl: result.url,
-          href: currentHref,
-          title: currentTitle
-        };
-      }
-      showToast('Ícono actualizado ✓');
-    } else {
-      showToast('Error: ' + result.error);
-    }
     input.remove();
   });
 }
