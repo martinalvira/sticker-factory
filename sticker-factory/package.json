@@ -1,0 +1,9 @@
+{
+  "name": "sticker-factory",
+  "version": "1.0.0",
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0",
+    "googleapis": "^140.0.0",
+    "node-fetch": "^2.7.0"
+  }
+}

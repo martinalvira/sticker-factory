@@ -1,0 +1,138 @@
+{
+  "brands": [
+    {
+      "id": "honda",
+      "name": "Honda",
+      "models": ["Wave S", "XR", "CB", "XL", "Pop"]
+    },
+    {
+      "id": "yamaha",
+      "name": "Yamaha",
+      "models": ["FZ", "YBR", "Crypton", "MT-03", "R3"]
+    },
+    {
+      "id": "zanella",
+      "name": "Zanella",
+      "models": ["ZB 110", "RX 150", "Max 70", "Due 110"]
+    },
+    {
+      "id": "cfmoto",
+      "name": "CFMOTO",
+      "models": ["250NK", "300NK", "650MT"]
+    }
+  ],
+  "kits": [
+    {
+      "id": "honda-waves-2026",
+      "brandId": "honda",
+      "model": "Wave S",
+      "name": "Diseño 2026",
+      "type": "Kit de gráficos",
+      "features": ["Kit de calcos símil original", "Vinilo de corte", "Fondo transparente"],
+      "description": "Nuestros kits están fabricados con vinilo de corte de alta durabilidad, resistente a los rayos UV, lluvia y lavados frecuentes. Fondo 100% transparente para una instalación limpia y profesional.",
+      "images": [
+        "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80",
+        "https://images.unsplash.com/photo-1591637333184-19aa84b3e01f?w=800&q=80",
+        "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=800&q=80"
+      ]
+    },
+    {
+      "id": "honda-waves-2021",
+      "brandId": "honda",
+      "model": "Wave S",
+      "name": "Diseño 2021",
+      "type": "Kit de gráficos",
+      "features": ["Kit de calcos símil original", "Vinilo de corte", "Fondo transparente"],
+      "description": "Diseño fiel al original de fábrica del modelo 2021. Alta durabilidad y fácil instalación.",
+      "images": [
+        "https://images.unsplash.com/photo-1591637333184-19aa84b3e01f?w=800&q=80",
+        "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80"
+      ]
+    },
+    {
+      "id": "honda-waves-dx",
+      "brandId": "honda",
+      "model": "Wave S",
+      "name": "Diseño DX",
+      "type": "Kit de gráficos",
+      "features": ["Kit de calcos símil original", "Vinilo de corte", "Fondo transparente"],
+      "description": "Versión DX con diseño deportivo exclusivo.",
+      "images": [
+        "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=800&q=80"
+      ]
+    },
+    {
+      "id": "honda-waves-llantas",
+      "brandId": "honda",
+      "model": "Wave S",
+      "name": "Kit de llantas",
+      "type": "Kit de llantas",
+      "features": ["Kit completo para ambas llantas", "Vinilo de corte", "Fondo transparente"],
+      "description": "Kit de stickers para llantas, corte de precisión para cada radio.",
+      "images": [
+        "https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=800&q=80"
+      ]
+    }
+  ],
+  "colorSeries": {
+    "A": {
+      "name": "COMUNES",
+      "price": 1000,
+      "colors": [
+        {"code":"A01","hex":"#FFDE00"},{"code":"A02","hex":"#F5C800"},
+        {"code":"A03","hex":"#FF8C00"},{"code":"A04","hex":"#FF6600"},
+        {"code":"A05","hex":"#E84400"},{"code":"A06","hex":"#CC0000"},
+        {"code":"A07","hex":"#E8005A"},{"code":"A08","hex":"#FF1493"},
+        {"code":"A09","hex":"#FF69B4"},{"code":"A10","hex":"#8B0069"},
+        {"code":"A11","hex":"#6600CC"},{"code":"A12","hex":"#9966FF"},
+        {"code":"A13","hex":"#00008B"},{"code":"A14","hex":"#0044CC"},
+        {"code":"A15","hex":"#00AAFF"},{"code":"A16","hex":"#008080"},
+        {"code":"A17","hex":"#00CED1"},{"code":"A18","hex":"#20B2AA"},
+        {"code":"A19","hex":"#006400"},{"code":"A20","hex":"#228B22"},
+        {"code":"A21","hex":"#7FFF00"},{"code":"A22","hex":"#FFFFFF"},
+        {"code":"A23","hex":"#C0C0C0"},{"code":"A24","hex":"#444444"},
+        {"code":"A25","hex":"#111111"},{"code":"A26","hex":"#000000"},
+        {"code":"A27","hex":"#8B4513"},{"code":"A28","hex":"#A8A8A8"},
+        {"code":"A29","hex":"#C5A028"},{"code":"A30","hex":"#B8860B"}
+      ]
+    },
+    "B": {
+      "name": "ESPECIALES 1",
+      "price": 1100,
+      "colors": [
+        {"code":"B01","hex":"#FF4500"},{"code":"B02","hex":"#00AAFF"},
+        {"code":"B03","hex":"#FF1493"},{"code":"B04","hex":"#00FF88"},
+        {"code":"B05","hex":"#AA00FF"},{"code":"B06","hex":"#FFD700"}
+      ]
+    },
+    "C": {
+      "name": "ESPECIALES 2",
+      "price": 1200,
+      "colors": [
+        {"code":"C01","hex":"#FF0000"},{"code":"C02","hex":"#0044FF"},
+        {"code":"C03","hex":"#222222"},{"code":"C04","hex":"#C5A028"}
+      ]
+    },
+    "D": {
+      "name": "REFLECTIVOS",
+      "price": 1300,
+      "colors": [
+        {"code":"D01","hex":"#FF1493"},{"code":"D02","hex":"#FF4500"},
+        {"code":"D03","hex":"#FFFF00"},{"code":"D04","hex":"#00FF00"},
+        {"code":"D05","hex":"#00FFFF"},{"code":"D06","hex":"#FFFFFF"}
+      ]
+    }
+  },
+  "site": {
+    "accentColor": "#E8000F",
+    "headerColor": "#000000",
+    "fontDisplay": "'Bebas Neue', sans-serif",
+    "fontBody": "'Inter', sans-serif",
+    "heroImages": [
+      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80",
+      "https://images.unsplash.com/photo-1591637333184-19aa84b3e01f?w=800&q=80",
+      "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=800&q=80",
+      "https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=800&q=80"
+    ]
+  }
+}
