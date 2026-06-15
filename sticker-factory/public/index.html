@@ -66,10 +66,10 @@ header{
 .header-nav a{
   color:#ccc;text-decoration:none;font-size:12px;font-weight:600;
   letter-spacing:1.5px;text-transform:uppercase;
-  padding:10px 20px;transition:color .2s;
-  border-right:1px solid #222;
+  padding:10px 24px;transition:color .2s;
+  border-left:1px solid #222;
 }
-.header-nav a:first-child{border-left:1px solid #222}
+.header-nav a:last-of-type{border-right:1px solid #222}
 .header-nav a:hover{color:var(--white)}
 .header-nav a.active{color:var(--white)}
 .social-nav{margin-left:auto;display:flex;gap:12px;align-items:center}
@@ -121,13 +121,9 @@ main{padding-top:95px}
 
 /* BRAND/MODEL CARDS */
 .cards-scroll{
-  display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;
-  scrollbar-width:thin;scrollbar-color:#ccc transparent;
-  scroll-snap-type:x mandatory;
+  display:flex;gap:12px;padding-bottom:8px;
+  justify-content:center;flex-wrap:wrap;
 }
-.cards-scroll::-webkit-scrollbar{height:4px}
-.cards-scroll::-webkit-scrollbar-track{background:transparent}
-.cards-scroll::-webkit-scrollbar-thumb{background:#ccc;border-radius:2px}
 
 .brand-card{
   flex-shrink:0;scroll-snap-align:start;
