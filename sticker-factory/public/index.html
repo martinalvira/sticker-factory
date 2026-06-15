@@ -973,6 +973,37 @@ async function uploadToCloudinary(file, folder) {
 function applySiteTheme(site) {
   if (site.accentColor) document.documentElement.style.setProperty('--red', site.accentColor);
   if (site.headerColor) document.documentElement.style.setProperty('--black', site.headerColor);
+  // Aplicar logo si existe
+  if (site.logoUrl) {
+    const logo = document.querySelector('.logo');
+    if (logo) logo.innerHTML = `<img src="${site.logoUrl}" alt="Logo" style="max-height:36px;object-fit:contain">`;
+  }
+  // Aplicar íconos sociales
+  if (site.socialIcons) {
+    const socialLinks = document.querySelectorAll('.social-nav a');
+    socialLinks.forEach((a, i) => {
+      if (site.socialIcons[i]) {
+        const icon = site.socialIcons[i];
+        if (icon.imgUrl) {
+          a.innerHTML = `<img src="${icon.imgUrl}" alt="${icon.title||''}" style="width:22px;height:22px;object-fit:contain;vertical-align:middle;filter:brightness(0) invert(1)">`;
+        } else if (icon.text) {
+          a.textContent = icon.text;
+        }
+        if (icon.href) a.setAttribute('href', icon.href);
+        if (icon.title) a.setAttribute('title', icon.title);
+      }
+    });
+  }
+  // Aplicar links del nav
+  if (site.navLinks) {
+    document.querySelectorAll('.header-nav a').forEach(a => {
+      const orig = a.dataset.efOriginal || a.textContent.trim();
+      if (site.navLinks[orig]) {
+        a.textContent = site.navLinks[orig].text;
+        a.setAttribute('href', site.navLinks[orig].href || '#');
+      }
+    });
+  }
 }
 
 function applyHeroImages(imgs) {
@@ -1983,12 +2014,22 @@ function efReplaceSocialImg(el) {
     showToast('Subiendo ícono...', 0);
     const result = await uploadToCloudinary(file, 'sticker-factory-icons');
     if (result.ok) {
-      // Reemplazar contenido del link por imagen
       const currentHref = el.getAttribute('href') || '#';
       const currentTitle = el.getAttribute('title') || '';
       el.innerHTML = `<img src="${result.url}" alt="${currentTitle}" style="width:22px;height:22px;object-fit:contain;vertical-align:middle;filter:brightness(0) invert(1)">`;
       el.dataset.efEdited = 'true';
       el.dataset.efNewIconUrl = result.url;
+      // Guardar en state.site
+      if (!state.site.socialIcons) state.site.socialIcons = [];
+      const socialLinks = Array.from(document.querySelectorAll('.social-nav a'));
+      const idx = socialLinks.indexOf(el);
+      if (idx >= 0) {
+        state.site.socialIcons[idx] = {
+          imgUrl: result.url,
+          href: currentHref,
+          title: currentTitle
+        };
+      }
       showToast('Ícono actualizado ✓');
     } else {
       showToast('Error: ' + result.error);
