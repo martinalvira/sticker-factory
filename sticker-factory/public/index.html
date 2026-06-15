@@ -982,15 +982,20 @@ function applySiteTheme(site) {
   if (site.socialIcons && site.socialIcons.length > 0) {
     const socialLinks = document.querySelectorAll('.social-nav a');
     socialLinks.forEach((a, i) => {
-      if (!site.socialIcons[i]) return;
       const icon = site.socialIcons[i];
+      if (!icon) return; // Si no hay datos para este ícono, dejarlo como está
+      if (icon.href) { a.setAttribute('href', icon.href); a.setAttribute('target', '_blank'); }
+      if (icon.title) a.setAttribute('title', icon.title);
       if (icon.imgUrl) {
-        a.innerHTML = `<img src="${icon.imgUrl}" alt="${icon.title||''}" style="width:22px;height:22px;object-fit:contain;vertical-align:middle;filter:brightness(0) invert(1)">`;
+        const img = document.createElement('img');
+        img.src = icon.imgUrl;
+        img.alt = icon.title || '';
+        img.style.cssText = 'width:22px;height:22px;object-fit:contain;vertical-align:middle;filter:brightness(0) invert(1)';
+        a.innerHTML = '';
+        a.appendChild(img);
       } else if (icon.text) {
         a.textContent = icon.text;
       }
-      if (icon.href) { a.setAttribute('href', icon.href); a.setAttribute('target', '_blank'); }
-      if (icon.title) a.setAttribute('title', icon.title);
     });
   }
   // Aplicar links del nav
