@@ -439,14 +439,14 @@ main{padding-top:95px}
 <!-- HEADER -->
 <header>
   <div class="header-top">
-    <a href="#" class="logo">STICKER<span>FACTORY</span></a>
+    <a href="#" class="logo" id="site-logo">STICKER<span>FACTORY</span></a>
     <div class="search-wrap">
       <input type="text" placeholder="Busca tu modelo:" id="searchInput" oninput="handleSearch(this.value)">
-      <button class="search-btn">🔍</button>
+      <button class="search-btn" id="icon-search" title="Lupa de búsqueda">🔍</button>
     </div>
     <div class="header-icons">
-      <a href="#" title="Mi cuenta">👤</a>
-      <a href="#" title="Carrito" style="position:relative">
+      <a href="#" title="Mi cuenta" id="icon-user">👤</a>
+      <a href="#" title="Carrito" id="icon-cart" style="position:relative">
         🛒<span class="cart-count" id="cartCount">0</span>
       </a>
     </div>
@@ -973,7 +973,17 @@ async function uploadToCloudinary(file, folder) {
 function applySiteTheme(site) {
   if (site.accentColor) document.documentElement.style.setProperty('--red', site.accentColor);
   if (site.headerColor) document.documentElement.style.setProperty('--black', site.headerColor);
-  // Aplicar logo si existe
+  // Aplicar íconos del header (lupa, usuario, carrito, logo)
+  if (site.headerIcons) {
+    Object.entries(site.headerIcons).forEach(([id, icon]) => {
+      const el = document.getElementById(id);
+      if (!el || !icon.imgUrl) return;
+      const cartCount = el.querySelector('#cartCount');
+      el.innerHTML = `<img src="${icon.imgUrl}" alt="${icon.title||''}" style="width:22px;height:22px;object-fit:contain;vertical-align:middle;filter:brightness(0) invert(1)">`;
+      if (cartCount) el.appendChild(cartCount);
+    });
+  }
+  // Aplicar logo imagen si existe
   if (site.logoUrl) {
     const logo = document.querySelector('.logo');
     if (logo) logo.innerHTML = `<img src="${site.logoUrl}" alt="Logo" style="max-height:36px;object-fit:contain">`;
@@ -1771,9 +1781,12 @@ function enableEditMode() {
 
 // ── Registrar todos los elementos editables ───────────────────
 const TEXT_SELS = [
-  // Header
-  { sel: '.logo',              type: 'text', label: 'Logo / Nombre del sitio' },
-  { sel: '.header-nav a',      type: 'text+url', label: 'Ítem del menú' },
+  // Header icons
+  { sel: '#icon-search',       type: 'header-icon', label: 'Ícono de búsqueda' },
+  { sel: '#icon-user',         type: 'header-icon', label: 'Ícono de usuario' },
+  { sel: '#icon-cart',         type: 'header-icon', label: 'Ícono de carrito' },
+  { sel: '.logo',              type: 'logo',        label: 'Logo / Nombre del sitio' },
+  // Header nav
   { sel: '.social-nav a',      type: 'icon+url', label: 'Ícono de red social' },
   // Steps
   { sel: '.section-title',     type: 'text', label: 'Título de sección' },
@@ -1880,7 +1893,11 @@ function showContextMenu(e, el) {
       <button class="ef-menu-btn" onclick="efEditSocialIcon(efTarget)"><span class="ef-icon">🔗</span> Editar URL / texto</button>
       <button class="ef-menu-btn" onclick="efReplaceSocialImg(efTarget)"><span class="ef-icon">🖼️</span> Cambiar ícono (PNG/SVG)</button>`;
   }
-  else if (type === 'logo') {
+  else if (type === 'header-icon') {
+    buttons = `
+      <button class="ef-menu-btn" onclick="efReplaceHeaderIcon(efTarget)"><span class="ef-icon">🖼️</span> Cambiar ícono (PNG/SVG)</button>
+      <button class="ef-menu-btn" onclick="efEditText(efTarget)"><span class="ef-icon">✏️</span> Editar emoji/texto</button>`;
+  }
     buttons = `
       <button class="ef-menu-btn" onclick="efEditText(efTarget)"><span class="ef-icon">✏️</span> Editar texto del logo</button>
       <button class="ef-menu-btn" onclick="efEditLogoImg(efTarget)"><span class="ef-icon">🖼️</span> Cambiar logo (imagen)</button>`;
@@ -2023,8 +2040,33 @@ function efEditLogoImg(el) {
   });
 }
 
-// Reemplazar ícono social por imagen PNG/SVG
-function efReplaceSocialImg(el) {
+// Reemplazar ícono del header (lupa, usuario, carrito)
+function efReplaceHeaderIcon(el) {
+  closeMenu();
+  const input = document.createElement('input');
+  input.type = 'file'; input.accept = 'image/png,image/svg+xml,image/jpeg,image/webp';
+  input.style.display = 'none';
+  document.body.appendChild(input);
+  input.click();
+  input.addEventListener('change', async () => {
+    const file = input.files[0]; if (!file) return;
+    showToast('Subiendo ícono...', 0);
+    const result = await uploadToCloudinary(file, 'sticker-factory-icons');
+    if (result.ok) {
+      const iconId = el.id;
+      // Guardar el cart-count si existe
+      const cartCount = el.querySelector('#cartCount');
+      el.innerHTML = `<img src="${result.url}" alt="${el.title||''}" style="width:22px;height:22px;object-fit:contain;vertical-align:middle;filter:brightness(0) invert(1)">`;
+      if (cartCount) el.appendChild(cartCount);
+      el.dataset.efEdited = 'true';
+      // Guardar en state.site.headerIcons
+      if (!state.site.headerIcons) state.site.headerIcons = {};
+      state.site.headerIcons[iconId] = { imgUrl: result.url, title: el.title || '' };
+      showToast('Ícono actualizado ✓');
+    } else { showToast('Error: ' + result.error); }
+    input.remove();
+  });
+}
   closeMenu();
   const input = document.createElement('input');
   input.type = 'file';
