@@ -19,7 +19,18 @@ exports.handler = async (event) => {
       });
       if (res.ok) {
         const json = await res.json();
-        return { statusCode: 200, headers, body: JSON.stringify(json.record) };
+        const saved = json.record;
+        // Leer data.json base
+        const dataPath = path.join(__dirname, '../../public/data.json');
+        const base = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
+        // Mergear: usar base para brands/kits/colorSeries si están vacíos en JSONBin
+        const merged = {
+          brands: (saved.brands && saved.brands.length > 0) ? saved.brands : base.brands,
+          kits: (saved.kits && saved.kits.length > 0) ? saved.kits : base.kits,
+          colorSeries: (saved.colorSeries && Object.keys(saved.colorSeries).length > 0) ? saved.colorSeries : base.colorSeries,
+          site: { ...base.site, ...saved.site }
+        };
+        return { statusCode: 200, headers, body: JSON.stringify(merged) };
       }
     }
   } catch (e) {
