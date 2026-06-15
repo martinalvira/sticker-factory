@@ -37,19 +37,16 @@ header{
   text-decoration:none;flex-shrink:0;
 }
 .logo span{color:var(--red)}
-.search-wrap{flex:1;max-width:600px;position:relative}
+.search-wrap{flex:1;max-width:600px;position:relative;margin:0 auto}
 .search-wrap input{
-  width:100%;padding:9px 40px 9px 16px;
+  width:100%;padding:9px 16px;
   background:#1a1a1a;border:1px solid #333;border-radius:4px;
   color:var(--white);font-size:13px;font-family:'Inter',sans-serif;
-  outline:none;
+  outline:none;text-align:center;
 }
 .search-wrap input::placeholder{color:#666;letter-spacing:1px;font-size:12px;text-transform:uppercase}
 .search-wrap input:focus{border-color:#555}
-.search-btn{
-  position:absolute;right:10px;top:50%;transform:translateY(-50%);
-  background:none;border:none;cursor:pointer;color:#888;font-size:18px;
-}
+.search-btn{display:none}
 .header-icons{display:flex;align-items:center;gap:16px;margin-left:auto}
 .header-icons button,.header-icons a{
   background:none;border:none;cursor:pointer;
@@ -62,7 +59,7 @@ header{
   width:16px;height:16px;display:flex;align-items:center;justify-content:center;
 }
 .header-nav{
-  display:flex;align-items:center;gap:0;
+  display:flex;align-items:center;justify-content:center;gap:0;
   padding:0 32px;border-top:1px solid #222;
 }
 .header-nav a{
@@ -71,7 +68,7 @@ header{
   padding:10px 20px;transition:color .2s;
   border-right:1px solid #222;
 }
-.header-nav a:first-child{padding-left:0}
+.header-nav a:first-child{border-left:1px solid #222}
 .header-nav a:hover{color:var(--white)}
 .header-nav a.active{color:var(--white)}
 .social-nav{margin-left:auto;display:flex;gap:12px;align-items:center}
@@ -1782,7 +1779,6 @@ function enableEditMode() {
 // ── Registrar todos los elementos editables ───────────────────
 const TEXT_SELS = [
   // Header icons
-  { sel: '#icon-search',       type: 'header-icon', label: 'Ícono de búsqueda' },
   { sel: '#icon-user',         type: 'header-icon', label: 'Ícono de usuario' },
   { sel: '#icon-cart',         type: 'header-icon', label: 'Ícono de carrito' },
   { sel: '.logo',              type: 'logo',        label: 'Logo / Nombre del sitio' },
