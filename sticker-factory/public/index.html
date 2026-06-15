@@ -166,16 +166,11 @@ main{padding-top:95px}
 .design-card:hover{border-color:#999;transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
 .design-card.selected{border-color:var(--red) !important}
 .design-card-img{
-  height:200px;overflow:hidden;background:#f8f8f8;
+  aspect-ratio:1/1;overflow:hidden;background:#f8f8f8;
   display:flex;align-items:center;justify-content:center;position:relative;
 }
-.design-card-img img{width:100%;height:100%;object-fit:cover}
-.zoom-btn{
-  position:absolute;top:10px;right:10px;
-  background:rgba(255,255,255,.9);border:none;border-radius:50%;
-  width:36px;height:36px;cursor:pointer;font-size:16px;
-  display:flex;align-items:center;justify-content:center;
-}
+.design-card-img img{width:100%;height:100%;object-fit:contain;padding:8px}
+.zoom-btn{display:none}
 .design-card-info{padding:14px 16px;border-top:1px solid var(--lightgray2)}
 .design-card-info strong{font-size:14px;font-weight:700;display:block}
 .design-card-info span{font-size:13px;color:#666}
@@ -858,7 +853,7 @@ async function loadData() {
     }
     renderBrands();
     applyHeroImages(state.site.heroImages || []);
-    // Si ya hay marca/modelo seleccionado, re-renderizar con datos frescos
+    state._dataLoaded = true;
     if (state.selected.brand && state.selected.model) renderDesigns();
     if (state.selected.design) {
       const kit = state.kits.find(k => k.id === state.selected.design.id);
@@ -929,6 +924,7 @@ function loadFallbackData() {
   const logoText = document.querySelector('.logo-text');
   if (logoText) logoText.style.visibility = 'visible';
   renderBrands();
+  state._dataLoaded = true;
 }
 
 // ─── GUARDAR EN API ──────────────────────────────────────────
@@ -1090,7 +1086,20 @@ function selectModel(name,el){
   state.selected.color=null;
   document.querySelectorAll('.model-card').forEach(c=>c.classList.remove('selected'));
   el.classList.add('selected');
-  renderDesigns();
+  // Esperar a que los datos estén cargados antes de renderizar diseños
+  if (state._dataLoaded) {
+    renderDesigns();
+  } else {
+    showToast('Cargando datos...', 0);
+    const interval = setInterval(() => {
+      if (state._dataLoaded) {
+        clearInterval(interval);
+        renderDesigns();
+      }
+    }, 100);
+    // Timeout de seguridad
+    setTimeout(() => clearInterval(interval), 5000);
+  }
   showStep('step-design');
   hideStep('step-product');
   hideStep('step-checkout');
