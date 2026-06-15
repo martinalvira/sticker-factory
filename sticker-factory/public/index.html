@@ -436,7 +436,7 @@ main{padding-top:95px}
 <!-- HEADER -->
 <header>
   <div class="header-top">
-    <a href="#" class="logo" id="site-logo">STICKER<span>FACTORY</span></a>
+    <a href="#" class="logo" id="site-logo"><span class="logo-text">STICKER<span style="color:var(--red)">FACTORY</span></span></a>
     <div class="search-wrap">
       <input type="text" placeholder="Busca tu modelo:" id="searchInput" oninput="handleSearch(this.value)">
       <button class="search-btn" id="icon-search" title="Lupa de búsqueda">🔍</button>
@@ -983,7 +983,18 @@ function applySiteTheme(site) {
   // Aplicar logo imagen si existe
   if (site.logoUrl) {
     const logo = document.querySelector('.logo');
-    if (logo) logo.innerHTML = `<img src="${site.logoUrl}" alt="Logo" style="max-height:36px;object-fit:contain">`;
+    if (logo) {
+      const logoText = logo.querySelector('.logo-text');
+      if (logoText) logoText.style.display = 'none';
+      // Remover imagen anterior si existe
+      const oldImg = logo.querySelector('img');
+      if (oldImg) oldImg.remove();
+      const img = document.createElement('img');
+      img.src = site.logoUrl;
+      img.alt = 'Logo';
+      img.style.cssText = 'max-height:36px;object-fit:contain;display:block';
+      logo.appendChild(img);
+    }
   }
   // Aplicar íconos sociales solo si existen en los datos guardados
   if (site.socialIcons && site.socialIcons.length > 0) {
@@ -2025,8 +2036,15 @@ function efEditLogoImg(el) {
     showToast('Subiendo logo...', 0);
     const result = await uploadToCloudinary(file, 'sticker-factory-branding');
     if (result.ok) {
-      // Preview: reemplaza contenido del logo por imagen
-      el.innerHTML = `<img src="${result.url}" alt="Logo" style="max-height:36px;object-fit:contain">`;
+      const logoText = el.querySelector('.logo-text');
+      if (logoText) logoText.style.display = 'none';
+      const oldImg = el.querySelector('img');
+      if (oldImg) oldImg.remove();
+      const img = document.createElement('img');
+      img.src = result.url;
+      img.alt = 'Logo';
+      img.style.cssText = 'max-height:36px;object-fit:contain;display:block';
+      el.appendChild(img);
       el.dataset.efEdited = 'true';
       el.dataset.efNewLogo = result.url;
       if (!state.site) state.site = {};
