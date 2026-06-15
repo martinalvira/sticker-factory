@@ -2202,7 +2202,8 @@ async function saveAllEdits() {
   document.querySelectorAll('img[data-ef-edited="true"]').forEach(img => {
     const newSrc = img.dataset.efNewSrc;
     if (!newSrc) return;
-    // Hero
+
+    // Hero images
     const heroImgs = document.querySelectorAll('.hero-img img');
     heroImgs.forEach((hi, i) => {
       if (hi === img) {
@@ -2210,6 +2211,46 @@ async function saveAllEdits() {
         state.site.heroImages[i] = newSrc;
       }
     });
+
+    // Kit images — imagen principal del producto
+    if (img.id === 'prodMainImg' || img.closest('.product-main-img')) {
+      if (state.selected.design) {
+        const kit = state.kits.find(k => k.id === state.selected.design.id);
+        if (kit) {
+          if (!kit.images) kit.images = [];
+          kit.images[0] = newSrc;
+        }
+      }
+    }
+
+    // Kit thumbnails
+    if (img.closest('.thumb-img')) {
+      if (state.selected.design) {
+        const kit = state.kits.find(k => k.id === state.selected.design.id);
+        if (kit) {
+          if (!kit.images) kit.images = [];
+          const thumbs = Array.from(document.querySelectorAll('.thumb-img img'));
+          const idx = thumbs.indexOf(img);
+          if (idx >= 0) kit.images[idx] = newSrc;
+        }
+      }
+    }
+
+    // Design card images (grilla de diseños)
+    if (img.closest('.design-card-img')) {
+      const card = img.closest('.design-card');
+      if (card) {
+        const kitName = card.querySelector('.design-card-info span')?.textContent;
+        const brandId = state.selected.brand;
+        const model = state.selected.model;
+        const kit = state.kits.find(k => k.brandId === brandId && k.model === model && k.name === kitName);
+        if (kit) {
+          if (!kit.images) kit.images = [];
+          kit.images[0] = newSrc;
+        }
+      }
+    }
+
     img.dataset.efEdited = 'done';
   });
 
