@@ -858,6 +858,12 @@ async function loadData() {
     }
     renderBrands();
     applyHeroImages(state.site.heroImages || []);
+    // Si ya hay marca/modelo seleccionado, re-renderizar con datos frescos
+    if (state.selected.brand && state.selected.model) renderDesigns();
+    if (state.selected.design) {
+      const kit = state.kits.find(k => k.id === state.selected.design.id);
+      if (kit) renderProductPage(kit);
+    }
   } catch(err) {
     console.warn('Modo offline — usando datos de ejemplo:', err.message);
     loadFallbackData();
