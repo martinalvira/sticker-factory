@@ -37,6 +37,7 @@ header{
   text-decoration:none;flex-shrink:0;
 }
 .logo span{color:var(--red)}
+.logo-text{visibility:hidden}
 .search-wrap{flex:1;max-width:600px;position:relative;margin:0 auto}
 .search-wrap input{
   width:100%;padding:9px 16px;
@@ -855,6 +856,10 @@ async function loadData() {
     state.colorSeries= data.colorSeries|| {};
     state.site       = data.site       || {};
     applySiteTheme(state.site);
+    if (!state.site.logoUrl) {
+      const logoText = document.querySelector('.logo-text');
+      if (logoText) logoText.style.visibility = 'visible';
+    }
     renderBrands();
     applyHeroImages(state.site.heroImages || []);
   } catch(err) {
@@ -919,6 +924,8 @@ function loadFallbackData() {
   };
   state.site = {accentColor:'#E8000F',headerColor:'#000000'};
   state._raw = {brands:state.brands,kits:state.kits,colorSeries:state.colorSeries,site:state.site};
+  const logoText = document.querySelector('.logo-text');
+  if (logoText) logoText.style.visibility = 'visible';
   renderBrands();
 }
 
