@@ -1600,7 +1600,12 @@ function showStep(id){
   const el=document.getElementById(id);
   if(!el)return;
   el.classList.remove('hidden');
-  setTimeout(()=>{el.classList.add('visible');el.scrollIntoView({behavior:'smooth',block:'start'})},50);
+  setTimeout(()=>{
+    el.classList.add('visible');
+    const headerHeight = document.querySelector('header')?.offsetHeight || 95;
+    const top = el.getBoundingClientRect().top + window.scrollY - headerHeight - 12;
+    window.scrollTo({top, behavior:'smooth'});
+  },50);
 }
 function hideStep(id){
   const el=document.getElementById(id);
