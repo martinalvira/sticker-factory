@@ -1756,15 +1756,15 @@ function enableEditMode() {
   // Barra superior
   const bar = document.createElement('div');
   bar.id = 'edit-bar';
-  bar.style.cssText = 'background:#E8000F;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:10px 24px;font-family:"Bebas Neue",sans-serif;font-size:17px;letter-spacing:2px;box-shadow:0 2px 16px rgba(0,0,0,.3)';
+  bar.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:99998;background:#E8000F;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:10px 24px;font-family:"Bebas Neue",sans-serif;font-size:17px;letter-spacing:2px;box-shadow:0 -2px 16px rgba(0,0,0,.3)';
   bar.innerHTML = `
     <span>✏ MODO EDICIÓN — tocá cualquier elemento para editarlo</span>
     <div style="display:flex;gap:10px">
       <button onclick="saveAllEdits()" style="background:#fff;color:#E8000F;border:none;padding:8px 18px;border-radius:5px;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1px;cursor:pointer">💾 GUARDAR TODO</button>
       <button onclick="disableEditMode()" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);padding:8px 14px;border-radius:5px;font-family:'Bebas Neue',sans-serif;font-size:15px;cursor:pointer">✕ SALIR</button>
     </div>`;
-  document.body.prepend(bar);
-  document.body.style.paddingTop = '50px';
+  document.body.appendChild(bar);
+  document.body.style.paddingBottom = '60px';
 
   // Registrar todos los elementos editables del DOM actual
   activateAllElements();
@@ -2217,6 +2217,7 @@ function disableEditMode() {
   domObserver?.disconnect();
   document.getElementById('edit-bar')?.remove();
   document.body.style.paddingTop = '';
+  document.body.style.paddingBottom = '';
   closeMenu();
   document.getElementById('ef-modal')?.remove();
   document.removeEventListener('click', closeMenuOnOutside, true);
